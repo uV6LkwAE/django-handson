@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponse
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .forms import BookForm
 from .models import Book
 
@@ -47,3 +47,20 @@ class BookCreateView(CreateView):
     def get_success_url(self):
         return reverse("book:book_detail", kwargs={"pk": self.object.pk})
 
+
+class BookUpdateView(UpdateView):
+    model = Book
+    form_class = BookForm
+    extra_context = {"page_title": "本の編集"}
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "本を更新しました。")
+        return response
+
+    def form_invalid(self, form):
+        messages.error(self.request, "入力内容を確認してください。", extra_tags="danger")
+        return super().form_invalid(form)
+
+    def get_success_url(self):
+        return reverse("book:book_detail", kwargs={"pk": self.object.pk})

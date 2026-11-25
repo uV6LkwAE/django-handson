@@ -14,5 +14,6 @@
     <dt>作成日時</dt>
     <dd>{{ book.created_at|date:"Y/m/d H:i" }}</dd>
 </dl>
+<a class="btn btn-primary" href="{% url 'book:book_update' book.pk %}">編集</a>
 <a class="btn btn-secondary" href="{% url 'book:book_list' %}">一覧に戻る</a>
 {% endblock %}
