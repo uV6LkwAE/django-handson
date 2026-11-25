@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }}{% endblock %}
+{% block content %}
+<h1 class="mb-3">{{ book.title }}</h1>
+{% if book.image %}
+<img src="{{ book.image.url }}" alt="{{ book.title }}の画像" class="img-fluid mb-3" style="max-height: 300px;">
+{% endif %}
+<dl>
+    <dt>カテゴリー</dt>
+    <dd>{{ book.get_category_display }}</dd>
+    <dt>キャプション</dt>
+    <dd>{{ book.caption|default:"未入力"|linebreaksbr }}</dd>
+    <dt>作成日時</dt>
+    <dd>{{ book.created_at|date:"Y/m/d H:i" }}</dd>
+</dl>
+<a class="btn btn-secondary" href="{% url 'book:book_list' %}">一覧に戻る</a>
+{% endblock %}

@@ -6,7 +6,7 @@
     <ul class="list-group">
         {% for book in books %}
             <li class="list-group-item">
-                {{ book.title }} <span class="badge text-bg-secondary">{{ book.get_category_display }}</span>
+                <a href="{% url 'book:book_detail' book.pk %}">{{ book.title }}</a> <span class="badge text-bg-secondary">{{ book.get_category_display }}</span>
             </li>
         {% empty %}
             <li class="list-group-item">本はまだ登録されていません。</li>
