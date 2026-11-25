@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Book
+from .models import Book, Review
 
 
 class BookForm(forms.ModelForm):
@@ -25,4 +25,14 @@ class BookForm(forms.ModelForm):
             "title": forms.TextInput(attrs={"class": "form-control"}),
             "category": forms.Select(attrs={"class": "form-select"}),
             "caption": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
+        }
+
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ["content"]
+        labels = {"content": "レビュー本文"}
+        widgets = {
+            "content": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
         }

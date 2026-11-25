@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .forms import BookForm
+from .forms import BookForm, ReviewForm
 from .models import Book
 
 # Create your views here.
@@ -72,3 +73,38 @@ class BookDeleteView(DeleteView):
     # reverse_lazyで、URLの文字列が必要になるまで解決を遅らせる。
     # BookUpdateView.get_success_urlのようにメソッド内ならreverseを使う。
     success_url = reverse_lazy("book:book_list")
+
+
+class ReviewCreateView(CreateView):
+    form_class = ReviewForm
+    template_name = "book/review_form.html"
+
+    def get_context_data(self, **kwargs):
+        # テンプレートに渡す変数の辞書を作る。親からformなどの標準の変数を受け取る。
+        context = super().get_context_data(**kwargs)
+        # self.kwargsはURLから受け取った値。book_pkで投稿対象の本を検索する。
+        # 見つからなければ404。見つかればテンプレートで {{ book.title }} などを使える。
+        context["book"] = get_object_or_404(Book, pk=self.kwargs["book_pk"])
+        return context
+
+    def form_valid(self, form):
+        # 入力の検証に成功したときに呼ばれる。form.instanceは保存予定のReview。
+        # URLで指定された本をレビューに紐づける。この代入だけではDBには保存されない。
+        form.instance.book = get_object_or_404(Book, pk=self.kwargs["book_pk"])
+        # 親の処理でレビューを保存し、get_success_url()へのリダイレクトを作る。
+        # 保存したReviewはself.objectに入る。
+        response = super().form_valid(form)
+        # 今回のリクエストに成功通知を登録し、移動先の画面で表示できるようにする。
+        messages.success(self.request, "レビューを投稿しました。")
+        return response
+
+    def form_invalid(self, form):
+        # 検証に失敗したときに呼ばれる。失敗通知を登録する。
+        messages.error(self.request, "入力内容を確認してください。", extra_tags="danger")
+        # 保存せず、入力値とエラーを保持したフォームで同じ画面を再表示する。
+        # このときもget_context_data()で投稿対象の本をテンプレートに渡す。
+        return super().form_invalid(form)
+
+    def get_success_url(self):
+        # 保存したレビューのbook_id（紐づく本の主キー）から、本の詳細画面のURLを作る。
+        return reverse("book:book_detail", kwargs={"pk": self.object.book_id})

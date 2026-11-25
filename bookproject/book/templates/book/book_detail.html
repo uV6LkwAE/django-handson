@@ -17,4 +17,16 @@
 <a class="btn btn-primary" href="{% url 'book:book_update' book.pk %}">編集</a>
 <a class="btn btn-danger" href="{% url 'book:book_delete' book.pk %}">削除</a>
 <a class="btn btn-secondary" href="{% url 'book:book_list' %}">一覧に戻る</a>
+<h2 class="mt-4">レビュー</h2>
+<a class="btn btn-primary mb-3" href="{% url 'book:review_create' book.pk %}">レビューを投稿</a>
+{% for review in book.reviews.all %}
+<div class="card mb-3">
+    <div class="card-body">
+        <p>{{ review.content|linebreaksbr }}</p>
+        <small>{{ review.created_at|date:"Y/m/d H:i" }}</small>
+    </div>
+</div>
+{% empty %}
+<p>レビューはまだない。</p>
+{% endfor %}
 {% endblock %}
