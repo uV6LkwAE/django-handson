@@ -20,7 +20,7 @@ class BookListView(ListView):
 class BookDetailView(DetailView):
     model = Book
 
-class BookCreateView(CreateView):
+class BookCreateView(LoginRequiredMixin, CreateView):
     model = Book
     form_class = BookForm
     # 追加でpage_titleをコンテキストとして渡す
@@ -50,7 +50,7 @@ class BookCreateView(CreateView):
         return reverse("book:book_detail", kwargs={"pk": self.object.pk})
 
 
-class BookUpdateView(UpdateView):
+class BookUpdateView(LoginRequiredMixin, UpdateView):
     model = Book
     form_class = BookForm
     extra_context = {"page_title": "本の編集"}
@@ -68,7 +68,7 @@ class BookUpdateView(UpdateView):
         return reverse("book:book_detail", kwargs={"pk": self.object.pk})
 
 
-class BookDeleteView(DeleteView):
+class BookDeleteView(LoginRequiredMixin, DeleteView):
     model = Book
     # クラス定義時はURL設定の読み込みが完了していない可能性があるため、
     # reverse_lazyで、URLの文字列が必要になるまで解決を遅らせる。

@@ -22,6 +22,7 @@
 {% for review in book.reviews.all %}
 <div class="card mb-3">
     <div class="card-body">
+        <p class="text-muted">投稿者：{{ review.author }}</p>
         <p>{{ review.content|linebreaksbr }}</p>
         <small>{{ review.created_at|date:"Y/m/d H:i" }}</small>
     </div>
