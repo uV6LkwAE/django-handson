@@ -119,6 +119,11 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# アップロードしたファイルの保存先
+MEDIA_URL = '/media/'
+# ブラウザから画像を見るためのURLの接頭辞
+MEDIA_ROOT = BASE_DIR / "media"
+
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
