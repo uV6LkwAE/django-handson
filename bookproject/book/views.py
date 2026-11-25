@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
@@ -75,7 +76,7 @@ class BookDeleteView(DeleteView):
     success_url = reverse_lazy("book:book_list")
 
 
-class ReviewCreateView(CreateView):
+class ReviewCreateView(LoginRequiredMixin, CreateView):
     form_class = ReviewForm
     template_name = "book/review_form.html"
 
@@ -91,6 +92,8 @@ class ReviewCreateView(CreateView):
         # 入力の検証に成功したときに呼ばれる。form.instanceは保存予定のReview。
         # URLで指定された本をレビューに紐づける。この代入だけではDBには保存されない。
         form.instance.book = get_object_or_404(Book, pk=self.kwargs["book_pk"])
+        # リクエストしてきたユーザーをセットする
+        form.instance.author = self.request.user
         # 親の処理でレビューを保存し、get_success_url()へのリダイレクトを作る。
         # 保存したReviewはself.objectに入る。
         response = super().form_valid(form)

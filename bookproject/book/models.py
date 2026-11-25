@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 # Create your models here.
@@ -24,6 +25,10 @@ class Book(models.Model):
         return self.title
 
 class Review(models.Model):
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
     # 本を削除すれば、紐づいているレビューも一緒に削除される。
     # レビューを削除しても、本は削除されない。
     # review.book → そのレビューに紐づく本（Bookオブジェクト）

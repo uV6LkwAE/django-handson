@@ -11,6 +11,16 @@
             <div class="container">
                 <a class="navbar-brand" href="{% url 'book:index' %}">本の管理</a>
                 <a href="{% url 'book:book_list' %}">本の一覧</a>
+                {% if user.is_authenticated %}
+                    <span>{{ user.username }}</span>
+                    <form method="post" action="{% url 'book:logout' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-outline-secondary" type="submit">ログアウト</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'book:login' %}">ログイン</a>
+                    <a href="{% url 'book:signup' %}">サインアップ</a>
+                {% endif %}
             </div>
         </nav>
         <main class="container pb-4">
