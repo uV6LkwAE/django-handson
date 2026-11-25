@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}本の一覧{% endblock %}
+{% block content %}
+    <h1 class="mb-3">本の一覧</h1>
+    <ul class="list-group">
+        {% for book in books %}
+            <li class="list-group-item">
+                {{ book.title }} <span class="badge text-bg-secondary">{{ book.get_category_display }}</span>
+            </li>
+        {% empty %}
+            <li class="list-group-item">本はまだ登録されていません。</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
