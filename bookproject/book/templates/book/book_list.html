@@ -3,6 +3,7 @@
 {% block title %}本の一覧{% endblock %}
 {% block content %}
     <h1 class="mb-3">本の一覧</h1>
+    <a class="btn btn-primary mb-3" href="{% url 'book:book_create' %}">新規作成</a>
     <ul class="list-group">
         {% for book in books %}
             <li class="list-group-item">
