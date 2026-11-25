@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .forms import BookForm, ReviewForm
+from .forms import BookForm, ReviewForm, SignupForm
 from .models import Book
 
 # Create your views here.
@@ -108,3 +108,9 @@ class ReviewCreateView(CreateView):
     def get_success_url(self):
         # 保存したレビューのbook_id（紐づく本の主キー）から、本の詳細画面のURLを作る。
         return reverse("book:book_detail", kwargs={"pk": self.object.book_id})
+
+
+class SignupView(CreateView):
+    form_class = SignupForm
+    template_name = "registration/signup.html"
+    success_url = reverse_lazy("book/login")

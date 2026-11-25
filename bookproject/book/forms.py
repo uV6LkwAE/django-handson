@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 
 from .models import Book, Review
 
@@ -36,3 +37,10 @@ class ReviewForm(forms.ModelForm):
         widgets = {
             "content": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
         }
+
+
+class SignupForm(UserCreationForm):
+    def __init__(self, *args, **kargs):
+        super.__init__(*args, **kargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"
