@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}本の削除{% endblock %}
+{% block content %}
+<h1 class="mb-3">本の削除</h1>
+<p>「{{ book.title }}」を削除しますか？</p>
+<form method="post">
+    {% csrf_token %}
+    <button class="btn btn-danger" type="submit">削除</button>
+    <a class="btn btn-secondary" href="{% url 'book:book_detail' book.pk %}">キャンセル</a>
+</form>
+{% endblock %}

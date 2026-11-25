@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponse
-from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import BookForm
 from .models import Book
 
@@ -64,3 +64,11 @@ class BookUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse("book:book_detail", kwargs={"pk": self.object.pk})
+
+
+class BookDeleteView(DeleteView):
+    model = Book
+    # クラス定義時はURL設定の読み込みが完了していない可能性があるため、
+    # reverse_lazyで、URLの文字列が必要になるまで解決を遅らせる。
+    # BookUpdateView.get_success_urlのようにメソッド内ならreverseを使う。
+    success_url = reverse_lazy("book:book_list")
